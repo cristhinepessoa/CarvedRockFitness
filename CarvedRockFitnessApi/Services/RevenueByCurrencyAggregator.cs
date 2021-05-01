@@ -20,9 +20,19 @@ namespace CarvedRockFitnessApi.Services
             var orderValueByCurrency = BucketOrderValueByCurrency(orders);
 
             var revenueInCurrencyList = new List<RevenueInCurrency>();
-            foreach (var currencyOrderRevenue in orderValueByCurrency)
+            foreach (Currency currency in Enum.GetValues(typeof(Currency)))
             {
-                revenueInCurrencyList.Add(new RevenueInCurrency(currencyOrderRevenue.Key, currencyOrderRevenue.Value));
+                if (currency != Currency.Unknown)
+                {
+                    var currencyOrderValue = 0m;
+
+                    if (orderValueByCurrency.ContainsKey(currency))
+                    {
+                        currencyOrderValue = orderValueByCurrency[currency];
+                    }
+
+                    revenueInCurrencyList.Add(new RevenueInCurrency(currency, currencyOrderValue));
+                }
             }
 
             return revenueInCurrencyList;
