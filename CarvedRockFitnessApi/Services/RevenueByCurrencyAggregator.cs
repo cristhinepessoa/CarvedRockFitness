@@ -17,7 +17,7 @@ namespace CarvedRockFitnessApi.Services
         public IEnumerable<RevenueInCurrency> GetRevenueByCurrency()
         {
             var orders = this.orderRepository.GetOrdersPlacedToday();
-            var orderValueByCurrency = GetOrderValueByCurrency(orders);
+            var orderValueByCurrency = BucketOrderValueByCurrency(orders);
 
             var revenueInCurrencyList = new List<RevenueInCurrency>();
             foreach (Currency currency in Enum.GetValues(typeof(Currency)))
