@@ -79,11 +79,18 @@ namespace CarvedRockFitnessApi.UnitTest
         }
 
         [Test]
-        public void FlakyTest()
+        public void GetRevenueByCurrencyOrdered_NoUnkownCurrenncyOrders_ReorderByRevenue()
         {
-            var random = new Random();
-            var diceRole = random.Next(1, 7);
-            Assert.Greater(diceRole, 3);
+            this.orderRepository.Setup(repository => repository.GetOrdersPlacedToday()).Returns(new List<Order>()
+            {
+                new Order(Currency.Gbp, 10m),
+                new Order(Currency.Eur, 100m)
+            });
+
+            var result = this.revenueByCurrencyAggregator.GetRevenueByCurrencyOrdered();
+            var expected = new[] { 100m, 10m, 0m };
+
+            Assert.IsTrue(result.Select(res => res.Revenue).SequenceEqual(expected));
         }
     }
 }
