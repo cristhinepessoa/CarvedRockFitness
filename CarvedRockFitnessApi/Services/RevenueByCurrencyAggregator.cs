@@ -41,24 +41,7 @@ namespace CarvedRockFitnessApi.Services
 
         public IEnumerable<RevenueInCurrency> GetRevenueByCurrencyOrdered()
         {
-            var orders = this.orderRepository.GetOrdersPlacedToday();
-            var orderValueByCurrency = GetOrderValueByCurrency(orders);
-
-            var revenueInCurrencyList = new List<RevenueInCurrency>();
-            foreach (Currency currency in Enum.GetValues(typeof(Currency)))
-            {
-                if (currency != Currency.Unknown)
-                {
-                    var currencyOrderValue = 0m;
-
-                    if (orderValueByCurrency.ContainsKey(currency))
-                    {
-                        currencyOrderValue = orderValueByCurrency[currency];
-                    }
-
-                    revenueInCurrencyList.Add(new RevenueInCurrency(currency, currencyOrderValue));
-                }
-            }
+            var revenueInCurrencyList = GetRevenueByCurrency();
 
             return revenueInCurrencyList.OrderByDescending(keySelector:currencyRevenue => currencyRevenue.Revenue);
         }
