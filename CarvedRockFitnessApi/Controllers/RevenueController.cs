@@ -9,17 +9,17 @@ namespace CarvedRockFitnessApi.Controllers
     [Route("[controller]")]
     public class RevenueController : Controller
     {
-        private readonly IRevenueByCurrencyAggregator revenueByCurrencyAggregator;
+        private readonly IRevenueByCurrencyAggregator _revenueByCurrencyAggregator;
 
         public RevenueController(IRevenueByCurrencyAggregator revenueByCurrencyAggregator)
         {
-            this.revenueByCurrencyAggregator = revenueByCurrencyAggregator;
+            this._revenueByCurrencyAggregator = revenueByCurrencyAggregator;
         }
 
         [HttpGet]
         public IEnumerable<RevenueInCurrency> Index()
         {
-            return this.revenueByCurrencyAggregator.GetRevenueByCurrencyOrdered();
+            return this._revenueByCurrencyAggregator.GetRevenueByCurrencyOrdered();
         }
     }
 }

@@ -8,16 +8,16 @@ namespace CarvedRockFitnessApi.Services
 {
     public class RevenueByCurrencyAggregator : IRevenueByCurrencyAggregator
     {
-        private readonly IOrderRepository orderRepository;
+        private readonly IOrderRepository _orderRepository;
 
         public RevenueByCurrencyAggregator(IOrderRepository orderRepository)
         {
-            this.orderRepository = orderRepository;
+            this._orderRepository = orderRepository;
         }
 
         public IEnumerable<RevenueInCurrency> GetRevenueByCurrency()
         {
-            var orders = this.orderRepository.GetOrdersPlacedToday();
+            var orders = this._orderRepository.GetOrdersPlacedToday();
             var orderValueByCurrency = GetOrderValueByCurrency(orders);
 
             var revenueInCurrencyList = new List<RevenueInCurrency>();
