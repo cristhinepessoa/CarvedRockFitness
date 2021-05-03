@@ -2,6 +2,7 @@
 using CarvedRockFitnessApi.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CarvedRockFitnessApi.Services
 {
@@ -22,20 +23,40 @@ namespace CarvedRockFitnessApi.Services
             var revenueInCurrencyList = new List<RevenueInCurrency>();
             foreach (Currency currency in Enum.GetValues(typeof(Currency)))
             {
-                if (currency != Currency.Unknown)
+
+                var currencyOrderValue = 0m;
+
+                if (orderValueByCurrency.ContainsKey(currency))
                 {
-                    var currencyOrderValue = 0m;
-
-                    if (orderValueByCurrency.ContainsKey(currency))
-                    {
-                        currencyOrderValue = orderValueByCurrency[currency];
-                    }
-
-                    revenueInCurrencyList.Add(new RevenueInCurrency(currency, currencyOrderValue));
+                    currencyOrderValue = orderValueByCurrency[currency];
                 }
+
+                revenueInCurrencyList.Add(new RevenueInCurrency(currency, currencyOrderValue));
+
             }
 
             return revenueInCurrencyList;
+        }
+
+        public IEnumerable<RevenueInCurrency> GetRevenueByCurrencyOrdered()
+        {
+            var orders = this.orderRepository.GetOrdersPlacedToday();
+            var orderValueByCurrency = GetOrderValueByCurrency(orders);
+
+            var revenueInCurrencyList = new List<RevenueInCurrency>();
+            foreach (Currency currency in Enum.GetValues(typeof(Currency)))
+            {
+                var currencyOrderValue = 0m;
+
+                if (orderValueByCurrency.ContainsKey(currency))
+                {
+                    currencyOrderValue = orderValueByCurrency[currency];
+                }
+
+                revenueInCurrencyList.Add(new RevenueInCurrency(currency, currencyOrderValue));
+            }
+
+            return revenueInCurrencyList.OrderByDescending(keySelector: currencyRevenue => currencyRevenue.Revenue);
         }
 
         private static Dictionary<Currency, decimal> GetOrderValueByCurrency(IEnumerable<Order> orders)
@@ -45,7 +66,7 @@ namespace CarvedRockFitnessApi.Services
             foreach (var order in orders)
             {
                 if (orderValueByCurrency.ContainsKey(order.Currency))
-                { 
+                {
                     orderValueByCurrency[order.Currency] += order.Price;
                 }
                 else

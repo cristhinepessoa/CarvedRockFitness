@@ -5,6 +5,6 @@ namespace CarvedRockFitnessApi.Services
 {
     public interface IRevenueByCurrencyAggregator
     {
-        IEnumerable<RevenueInCurrency> GetRevenueByCurrency();
+        IEnumerable<RevenueInCurrency> GetRevenueByCurrencyOrdered();
     }
 }

@@ -19,7 +19,7 @@ namespace CarvedRockFitnessApi.Controllers
         [HttpGet]
         public IEnumerable<RevenueInCurrency> Index()
         {
-            return this.revenueByCurrencyAggregator.GetRevenueByCurrency();
+            return this.revenueByCurrencyAggregator.GetRevenueByCurrencyOrdered();
         }
     }
 }
