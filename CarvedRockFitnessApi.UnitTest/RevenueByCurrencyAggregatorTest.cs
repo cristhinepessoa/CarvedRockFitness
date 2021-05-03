@@ -75,7 +75,7 @@ namespace CarvedRockFitnessApi.UnitTest
 
             var result = this.revenueByCurrencyAggregator.GetRevenueByCurrency();
 
-            Assert.Null(result.ToList().FirstOrDefault(currencyByRevenue => currencyByRevenue.Currency == Currency.Unknown)?.Revenue);
+            Assert.AreEqual(0, result.ToList().FirstOrDefault(currencyByRevenue => currencyByRevenue.Currency == Currency.Unknown)?.Revenue);
         }
 
         [Test]
